@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>Lab 2 | COMP1073 Client-Side JavaScript</title>
+    <!-- <link href="styles.css" rel="stylesheet" /> -->
+    <style>
+        html {
+            font-family: sans-serif;
+            font-size: 200%;
+            background-color: rgb(0, 0, 0);
+            color: rgb(255, 255, 255);
+            transition-property: background-color;
+            transition-duration: 0.25s;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Lab 2</h1>
+    <p>
+        This script will enable the user to adjust the below range input
+        elements to modify the
+        <abbr title="Red, Green, Blue">RGB</abbr> values of the
+        <code>background-color</code> CSS property of the HTML element.
+    </p>
+    <label for="red">Red</label>
+    <input id="red" type="range" min="0" max="255" value="0" />
+    <label for="green">Green</label>
+    <input id="green" type="range" min="0" max="255" value="0" />
+    <label for="blue">Blue</label>
+    <input id="blue" type="range" min="0" max="255" value="0" />
+
+    <script>
+        /* Declare and initialize global variables
+		-------------------------------------------------- */
+        var pageBg = document.querySelector("html");
+        var sliders = document.getElementsByTagName("input");
+        var rgb = [0, 0, 0];
+
+        /* Event handlers for range sliders
+		-------------------------------------------------- */
+        for (var i = 0; i < sliders.length; i++) {
+            // Loop through the three range inputs and for each one, add an onchange event listener
+            sliders[i].onchange = function () {
+                // If an input range slider is moved, grab it’s id attribute value
+                var whichSlider = this.getAttribute("id");
+                // …also, grab the numerical value that it is set to
+                var sliderValue = this.value;
+                // Declare a new variable to hold the new RGB value that calls a function that updates the global rgb variable, passing in what slider was moved (whichSlider), and its value (sliderValue)
+                newRgb = changeRgb(whichSlider, sliderValue);
+                // Call a function that builds a new CSS background-color property (as a string), passing it the updated RGB array (newRgb)
+                var newCSS = writeCSS(newRgb);
+                // Directly change the background-color of the page using the new CSS rgb value
+                pageBg.style.backgroundColor = newCSS;
+            };
+        }
+
+        /* Functions
+		-------------------------------------------------- */
+        function changeRgb(channel, value) {
+    switch (channel) {
+        case "red":
+            rgb[0] = value;
+            break;
+        case "green":
+            rgb[1] = value;
+            break;
+        case "blue":
+            rgb[2] = value;
+            break;
+    }
+    return rgb;
+}
+
+function writeCSS(newRgb) {
+    let newColor = `rgb(${newRgb[0]}, ${newRgb[1]}, ${newRgb[2]})`;
+    return newColor;
+}
+
+for (let i = 0; i < sliders.length; i++) {
+    sliders[i].addEventListener("input", function () {
+        let whichSlider = this.getAttribute("id");
+        let sliderValue = this.value;
+        let newRgb = changeRgb(whichSlider, sliderValue);
+        let newCSS = writeCSS(newRgb);
+        pageBg.style.backgroundColor = newCSS;
+    });
+}
+
+
+        // This page inspired by https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Building_blocks/Return_values
+    </script>
+</body>
+
+</html>
